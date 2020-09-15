@@ -1,0 +1,30 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+@using AuthOnDemand.Shared
+
+<h1>Hello, world!</h1>
+
+<button @onclick="DoLogin">Login</button>
+
+<p class="mt-4">After you logged in you can access the API with the provided cookie</p>
+
+<button @onclick="CallApi">Call API</button>
+
+<p>@UserInfo</p>
+
+@code
+{
+    string UserInfo = "";
+
+    void DoLogin()
+    {
+        NavigationManager.NavigateTo("/login/challenge", true);
+    }
+
+    async Task CallApi()
+    {
+        var userData = await Http.GetFromJsonAsync<UserData>("UserData");
+        UserInfo = $"Hello {userData.Name}. Your mail is {userData.Email}";
+    }
+}
